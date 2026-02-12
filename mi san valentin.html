@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>¿Quieres ser mi San Valentín?</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --pink: #ffb6c1;
+            --red: #e63946;
+            --white: #fff;
+            --rose: #f8bbd0;
+            --shadow: 0 8px 32px 0 rgba(231,57,70,0.15);
+        }
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, var(--pink) 0%, var(--rose) 100%);
+            min-height: 100vh;
+            font-family: 'Montserrat', Arial, sans-serif;
+            overflow-x: hidden;
+        }
+        body {
+            position: relative;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        /* Floating Hearts */
+        .heart {
+            position: absolute;
+            width: 32px;
+            height: 32px;
+            pointer-events: none;
+            opacity: 0.7;
+            animation: floatHeart 8s linear infinite;
+        }
+        .heart svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        @keyframes floatHeart {
+            0% { transform: translateY(0) scale(1) rotate(0deg);}
+            100% { transform: translateY(-100vh) scale(1.2) rotate(20deg);}
+        }
+        /* Proposal Box */
+        .proposal-box {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--white);
+            border-radius: 32px;
+            box-shadow: var(--shadow);
+            padding: 2.5rem 2rem 2rem 2rem;
+            text-align: center;
+            min-width: 320px;
+            max-width: 90vw;
+            z-index: 2;
+            transition: box-shadow 0.3s;
+        }
+        .proposal-box h1 {
+            font-family: 'Pacifico', cursive;
+            color: var(--red);
+            font-size: 2.1rem;
+            margin-bottom: 2rem;
+            margin-top: 0;
+            letter-spacing: 1px;
+        }
+        .btn-row {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+        .val-btn {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            padding: 0.9em 2.2em;
+            border: none;
+            border-radius: 2em;
+            cursor: pointer;
+            transition: 
+                transform 0.25s cubic-bezier(.68,-0.55,.27,1.55),
+                background 0.2s,
+                color 0.2s;
+            box-shadow: 0 2px 12px 0 rgba(230,57,70,0.08);
+            outline: none;
+            margin: 0;
+            background: var(--pink);
+            color: var(--red);
+        }
+        .val-btn.yes {
+            background: var(--red);
+            color: var(--white);
+        }
+        /* Envelope Animation */
+        .envelope-container {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 3;
+            width: 340px;
+            max-width: 95vw;
+            height: 320px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+        }
+        @media (max-width: 500px) {
+            .envelope-container { width: 98vw; height: 240px;}
+            .proposal-box { min-width: unset; padding: 1.5rem 0.5rem;}
+        }
+        .envelope {
+            position: relative;
+            width: 320px;
+            max-width: 90vw;
+            height: 200px;
+            margin: 0 auto;
+            perspective: 800px;
+            pointer-events: none;
+        }
+        @media (max-width: 500px) {
+            .envelope { width: 98vw; height: 140px;}
+        }
+        .envelope-flap {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100px;
+            background: linear-gradient(135deg, var(--red) 60%, var(--pink) 100%);
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+            z-index: 3;
+            transform-origin: bottom center;
+            box-shadow: 0 2px 8px 0 rgba(230,57,70,0.08);
+            transition: transform 1s cubic-bezier(.68,-0.55,.27,1.55);
+        }
+        .envelope.open .envelope-flap {
+            transform: rotateX(-120deg);
+        }
+        .envelope-body {
+            position: absolute;
+            top: 40px; left: 0;
+            width: 100%; height: 120px;
+            background: var(--white);
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 16px;
+            border: 2px solid var(--red);
+            z-index: 2;
+            box-shadow: 0 8px 32px 0 rgba(231,57,70,0.10);
+        }
+        .envelope-bottom {
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 100%; height: 40px;
+            background: linear-gradient(135deg, var(--pink) 60%, var(--red) 100%);
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 16px;
+            z-index: 1;
+        }
+        /* Letter Animation */
+        .letter {
+            position: absolute;
+            top: 60px; left: 50%;
+            transform: translate(-50%, 60%) scale(0.98);
+            width: 90%;
+            min-height: 120px;
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 4px 24px 0 rgba(231,57,70,0.10);
+            padding: 1.5rem 1.2rem 1.2rem 1.2rem;
+            opacity: 0;
+            z-index: 4;
+            transition: 
+                transform 1s cubic-bezier(.68,-0.55,.27,1.55),
+                opacity 0.7s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            pointer-events: auto;
+        }
+        .envelope.open .letter {
+            opacity: 1;
+            transform: translate(-50%, -40%) scale(1);
+            transition-delay: 0.5s, 0.5s;
+        }
+        .letter h2 {
+            font-family: 'Pacifico', cursive;
+            color: var(--red);
+            font-size: 1.3rem;
+            margin: 0 0 0.7rem 0;
+            text-align: center;
+        }
+        .letter .long-message {
+            font-size: 1.05rem;
+            color: #b71c1c;
+            margin-bottom: 1.1rem;
+            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .letter .media-placeholder {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80px;
+            margin-top: 0.5rem;
+        }
+        .letter img, .letter video {
+            max-width: 90%;
+            max-height: 120px;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px 0 rgba(230,57,70,0.08);
+            background: #fce4ec;
+        }
+        /* Button Scaling */
+        .val-btn {
+            transition: 
+                transform 0.25s cubic-bezier(.68,-0.55,.27,1.55),
+                background 0.2s,
+                color 0.2s;
+        }
+        /* Responsive */
+        @media (max-width: 600px) {
+            .proposal-box h1 { font-size: 1.2rem;}
+            .val-btn { font-size: 1rem; padding: 0.7em 1.5em;}
+            .envelope { width: 98vw; }
+            .letter { padding: 1rem 0.5rem;}
+        }
+        /* Decorative SVGs (flowers) */
+        .flower {
+            position: absolute;
+            width: 48px;
+            height: 48px;
+            opacity: 0.6;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .flower.flower1 { top: 12px; left: 18px; transform: rotate(-12deg);}
+        .flower.flower2 { bottom: 24px; right: 22px; transform: rotate(18deg);}
+        .flower.flower3 { top: 30px; right: 30px; transform: rotate(-8deg);}
+        .flower.flower4 { bottom: 18px; left: 24px; transform: rotate(10deg);}
+    </style>
+</head>
+<body>
+    <!-- Floating Hearts -->
+    <div class="heart" style="left:8vw;top:90vh;animation-delay:0s;">
+        <svg viewBox="0 0 32 32"><path fill="#e63946" d="M16 29s-13-8.35-13-16.5S9.5 2 16 8.5 29 2 29 12.5 16 29 16 29z"/></svg>
+    </div>
+    <div class="heart" style="left:80vw;top:95vh;animation-delay:2s;">
+        <svg viewBox="0 0 32 32"><path fill="#ffb6c1" d="M16 29s-13-8.35-13-16.5S9.5 2 16 8.5 29 2 29 12.5 16 29 16 29z"/></svg>
+    </div>
+    <div class="heart" style="left:50vw;top:100vh;animation-delay:1s;">
+        <svg viewBox="0 0 32 32"><path fill="#e63946" d="M16 29s-13-8.35-13-16.5S9.5 2 16 8.5 29 2 29 12.5 16 29 16 29z"/></svg>
+    </div>
+    <div class="heart" style="left:25vw;top:98vh;animation-delay:3s;">
+        <svg viewBox="0 0 32 32"><path fill="#ffb6c1" d="M16 29s-13-8.35-13-16.5S9.5 2 16 8.5 29 2 29 12.5 16 29 16 29z"/></svg>
+    </div>
+    <!-- Decorative Flowers -->
+    <div class="flower flower1">
+        <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="8" fill="#e63946"/><circle cx="10" cy="24" r="6" fill="#ffb6c1"/><circle cx="38" cy="24" r="6" fill="#ffb6c1"/><circle cx="24" cy="10" r="6" fill="#ffb6c1"/><circle cx="24" cy="38" r="6" fill="#ffb6c1"/></svg>
+    </div>
+    <div class="flower flower2">
+        <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="8" fill="#e63946"/><circle cx="10" cy="24" r="6" fill="#ffb6c1"/><circle cx="38" cy="24" r="6" fill="#ffb6c1"/><circle cx="24" cy="10" r="6" fill="#ffb6c1"/><circle cx="24" cy="38" r="6" fill="#ffb6c1"/></svg>
+    </div>
+    <div class="flower flower3">
+        <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="8" fill="#e63946"/><circle cx="10" cy="24" r="6" fill="#ffb6c1"/><circle cx="38" cy="24" r="6" fill="#ffb6c1"/><circle cx="24" cy="10" r="6" fill="#ffb6c1"/><circle cx="24" cy="38" r="6" fill="#ffb6c1"/></svg>
+    </div>
+    <div class="flower flower4">
+        <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="8" fill="#e63946"/><circle cx="10" cy="24" r="6" fill="#ffb6c1"/><circle cx="38" cy="24" r="6" fill="#ffb6c1"/><circle cx="24" cy="10" r="6" fill="#ffb6c1"/><circle cx="24" cy="38" r="6" fill="#ffb6c1"/></svg>
+    </div>
+    <!-- Proposal Box -->
+    <section class="proposal-box" id="proposalBox">
+        <h1>¿Quieres ser mi San Valentín?</h1>
+        <div class="btn-row" id="btnRow">
+            <button class="val-btn yes" id="yesBtn" style="transform: scale(1);">Sí</button>
+            <button class="val-btn no" id="noBtn" style="transform: scale(1);">No</button>
+        </div>
+    </section>
+    <!-- Envelope & Letter -->
+    <div class="envelope-container" id="envelopeContainer" style="display:none;">
+        <div class="envelope" id="envelope">
+            <div class="envelope-flap"></div>
+            <div class="envelope-body"></div>
+            <div class="envelope-bottom"></div>
+            <div class="letter" id="letter">
+                <h2>Sabía que ibas a decir que sí</h2>
+                <div class="long-message">
+                    Te espera un dia lleno de mucho amor 
+                    y espero que este sea el primero de muchos mas 14 de febrero juntos.<br>
+                    para ello, quiero dejarte este pequeño detalle y este pequeño verso:<br><br>
+                    Embrigame, del cafe de tus ojos,
+                    seduceme, con el dulce aroma de tu piel, 
+                    envuelveme, con el calor de tus abrazos,
+                    llename, del dulzor de tus labios,
+                    y hazme tuyo, con el amor de tu corazon.
+                </div>
+                <div class="media-placeholder">
+                    <!-- Puedes reemplazar la imagen por un video si lo deseas -->
+                    <img src="monito.png" alt="San Valentín" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Button scaling logic
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        let yesScale = 1, noScale = 1;
+        let swapped = false;
+
+        noBtn.addEventListener('click', function() {
+            // Shrink No, Grow Yes
+            noScale *= 0.8;
+            yesScale *= 1.15;
+            if (noScale < 0.2) noScale = 0.2;
+            if (yesScale > 2.5) yesScale = 2.5;
+            noBtn.style.transform = `scale(${noScale})`;
+            yesBtn.style.transform = `scale(${yesScale})`;
+
+            // Swap if No is critically small
+            if (noScale <= 0.22 && !swapped) {
+                swapped = true;
+                setTimeout(() => {
+                    // Swap positions in DOM
+                    const btnRow = document.getElementById('btnRow');
+                    btnRow.insertBefore(noBtn, yesBtn);
+                    // Animate a little bounce
+                    yesBtn.style.transition = 'transform 0.25s cubic-bezier(.68,-0.55,.27,1.55), background 0.2s, color 0.2s';
+                    noBtn.style.transition = 'transform 0.25s cubic-bezier(.68,-0.55,.27,1.55), background 0.2s, color 0.2s';
+                    yesBtn.style.transform += ' scale(1.08)';
+                    setTimeout(() => {
+                        yesBtn.style.transform = `scale(${yesScale})`;
+                    }, 250);
+                }, 200);
+            }
+        });
+
+        yesBtn.addEventListener('click', function() {
+            // Hide proposal, show envelope
+            document.getElementById('proposalBox').style.display = 'none';
+            const envelopeContainer = document.getElementById('envelopeContainer');
+            envelopeContainer.style.display = 'flex';
+            setTimeout(() => {
+                document.getElementById('envelope').classList.add('open');
+            }, 200);
+        });
+
+        // Floating hearts randomize
+        function randomizeHearts() {
+            document.querySelectorAll('.heart').forEach((el, i) => {
+                el.style.left = Math.random()*90 + 'vw';
+                el.style.top = (90+Math.random()*10) + 'vh';
+                el.style.animationDuration = (7+Math.random()*3) + 's';
+                el.style.animationDelay = (Math.random()*4) + 's';
+            });
+        }
+        setTimeout(randomizeHearts, 100);
+
+        // Responsive scaling for envelope/letter
+        function scaleEnvelope() {
+            const env = document.getElementById('envelope');
+            if (!env) return;
+            let w = window.innerWidth;
+            if (w < 400) {
+                env.style.width = '98vw';
+            } else {
+                env.style.width = '320px';
+            }
+        }
+        window.addEventListener('resize', scaleEnvelope);
+        scaleEnvelope();
+    </script>
+</body>
+</html>
